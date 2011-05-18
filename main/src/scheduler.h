@@ -5,9 +5,9 @@
 #include <stdbool.h>
 
 typedef struct __task {
-    uint16_t counter;
+    volatile uint16_t counter;
     uint16_t target;
-    bool enabled;
+    volatile bool enabled;
     void (*task_callback)(void);
 } Task;
 

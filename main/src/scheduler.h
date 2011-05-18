@@ -12,11 +12,13 @@ typedef struct __task {
 } Task;
 
 /*
- * See tests to figure out how the hell to invoke this function.
+ * See tests to figure out how the hell to invoke this function.  I do not 
+ * know why it works, I'm just glad it works.
  *
  * I suck at C.
  */
 void scheduler_init(Task **tasks, const uint8_t task_count);
 void scheduler_tick(void);
+void scheduler_invoke_tasks(void);
 
 #endif

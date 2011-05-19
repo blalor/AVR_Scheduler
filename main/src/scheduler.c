@@ -13,6 +13,7 @@ static bool tick_occurred;
 void scheduler_init(Task **task_ptr_arr, const uint8_t tc) {
     tasks = task_ptr_arr;
     task_count = tc;
+    tick_occurred = false;
 }
 
 void scheduler_tick() {
@@ -31,7 +32,7 @@ void scheduler_invoke_tasks() {
             if (
                 tasks[i]->enabled &&
                 (tasks[i]->counter > 0) &&
-                (tasks[i]->counter == tasks[i]->target)
+                (tasks[i]->counter >= tasks[i]->target)
             ) {
                 tasks[i]->counter = 0;
 

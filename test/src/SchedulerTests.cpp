@@ -99,3 +99,23 @@ TEST(SchedulerTests, NoTaskInvocationWithoutTick) {
     BYTES_EQUAL(10, noop_task.counter);
     BYTES_EQUAL(0, noop_invocation_count);
 }
+
+TEST(SchedulerTests, SkippedInvocationStillFires) {
+    // ensure tasks still fire even if multiple ticks occur between invocations
+    
+    noop_task.counter = 9;
+    noop_task.target = 10;
+    
+    const Task *tasks[] = {&noop_task};
+    scheduler_init((Task **)&tasks, sizeof(tasks)/sizeof(tasks[0]));
+    
+    scheduler_tick();
+    scheduler_tick();
+
+    BYTES_EQUAL(11, noop_task.counter);
+
+    scheduler_invoke_tasks();
+
+    BYTES_EQUAL(1, noop_invocation_count);
+    BYTES_EQUAL(0, noop_task.counter);
+}

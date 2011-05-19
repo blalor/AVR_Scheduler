@@ -18,7 +18,15 @@ typedef struct __task {
  * I suck at C.
  */
 void scheduler_init(Task **tasks, const uint8_t task_count);
+
+/*
+ * Invoked periodically by the timer.
+ */
 void scheduler_tick(void);
+
+/*
+ * Called in the main execution loop. Invokes tasks when they're ready.
+ */
 void scheduler_invoke_tasks(void);
 
 #endif

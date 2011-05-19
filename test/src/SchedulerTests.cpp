@@ -88,12 +88,14 @@ TEST(SchedulerTests, InvokeTask) {
 
 TEST(SchedulerTests, NoTaskInvocationWithoutTick) {
     // task must have non-zero counter to be invoked
+    noop_task.counter = 10;
+    noop_task.target = 10;
     
     const Task *tasks[] = {&noop_task};
     scheduler_init((Task **)&tasks, sizeof(tasks)/sizeof(tasks[0]));
     
     scheduler_invoke_tasks();
     
-    BYTES_EQUAL(0, noop_task.counter);
+    BYTES_EQUAL(10, noop_task.counter);
     BYTES_EQUAL(0, noop_invocation_count);
 }

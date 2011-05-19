@@ -7,6 +7,8 @@
  Configure a timer to execute scheduler_tick() periodically.  Call
  scheduler_invoke_tasks() from main loop.
  
+ scheduler_tick() could be invoked via any timer interrupt (overflow or compare)
+ 
  Ticks occur at (F_CPU/timer_prescaler)/timer_overflow_or_compare.
  
  Example:
@@ -25,8 +27,8 @@
  
  F_CPU: 8,000,000 (8 MHz)
  +----------+------------+-----------+--------------+---------------+----------------+----------------+
- |          |            |           |              |              S  E  C  O  N  D  S                |
- | prescale |        Hz  |  µS/cycle | µS/TCNTx OVR | max - uint8_t | max - uint16_t | max - uint32_t |
+ |          |            |  µS/cycle |              |              S  E  C  O  N  D  S                |
+ | prescale |        Hz  |   (1/Hz)  | µS/TCNTx OVR | max - uint8_t | max - uint16_t | max - uint32_t |
  +----------+------------+-----------+--------------+---------------+----------------+----------------+
  |        1 | 8,000,000  |     0.125 |           32 |         0.008 |          2.097 |        137,439 |
  |        2 | 4,000,000  |     0.250 |           64 |         0.016 |          4.194 |        274,878 |
@@ -44,16 +46,25 @@
  |    8,192 |      976.6 | 1,024.000 |      262,144 |        66.847 |     17,179.607 |  1,125,899,907 |
  |   16,384 |      488.3 | 2,048.000 |      524,288 |       133.693 |     34,359.214 |  2,251,799,813 |
  +----------+------------+-----------+--------------+---------------+----------------+----------------+
-    
 */
 
 #include <stdint.h>
 #include <stdbool.h>
 
+// compile-time type selection allows for easier modification per table above
+#define COUNTER_TIMER_TYPE uint16_t
+
+/* for future use; stolen from Arduino's wiring.h
+#define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
+#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
+#define microsecondsToClockCycles(a) ( ((a) * (F_CPU / 1000L)) / 1000L )
+*/
+
 typedef struct __task {
-    volatile uint16_t counter;
-    uint16_t target;
+    volatile COUNTER_TIMER_TYPE counter;
+    volatile COUNTER_TIMER_TYPE target;
     volatile bool enabled;
+    volatile bool ready_to_fire;
     void (*task_callback)(void);
 } Task;
 

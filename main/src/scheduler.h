@@ -61,10 +61,9 @@
 */
 
 typedef struct __task {
-    volatile COUNTER_TIMER_TYPE counter;
-    volatile COUNTER_TIMER_TYPE target;
-    volatile bool enabled;
-    volatile bool ready_to_fire;
+    COUNTER_TIMER_TYPE counter;
+    COUNTER_TIMER_TYPE target;
+    bool enabled;
     void (*task_callback)(void);
 } Task;
 

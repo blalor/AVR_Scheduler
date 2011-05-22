@@ -14,13 +14,13 @@
  Example:
      F_CPU = 8000000UL (8 MHz)
      prescale = 64
-     timer incremented every 0.8 µS
+     timer incremented every 8 µS
      timer overflow every 256 ticks
      
      scheduler_tick() invoked on overflow:
-         (0.8 µS * 256) = 204.8 µS per counter increment
-         (204.8 µS * 256) = 52428.8 µS max task period uint8_t
-         (204.8 µS * 65535) = 13421568 µS / 13.4 S max task period uint16_t
+         (8 µS * 256) = 2048 µS per counter increment
+         (2048 µS * 256) = 524288 µS max task period uint8_t
+         (2048 µS * 65535) = 134215680 µS / 134.2 S max task period uint16_t
  
  The table below shows the maximum counter values that can be achieved for a 
  given prescaler and counter/target size.

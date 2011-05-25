@@ -106,3 +106,8 @@ TEST(SchedulerTests, MissedTriggerStillFires) {
     BYTES_EQUAL(0, spy_task.counter);
     BYTES_EQUAL(1, spy_invocation_count);
 }
+
+TEST(SchedulerTests, ConvenienceDefines) {
+    LONGS_EQUAL(7500L, secToTaskTarget(64, 250, 15));
+    LONGS_EQUAL(7500L, usecToTaskTarget(64, 250, 15000000UL));
+}

@@ -60,6 +60,9 @@
 #define microsecondsToClockCycles(a) ( ((a) * (F_CPU / 1000L)) / 1000L )
 */
 
+#define usecToTaskTarget(prescale, timer_tick, us) (us / ((prescale * timer_tick * 1000000UL)/F_CPU))
+#define secToTaskTarget(prescale, timer_tick, s) usecToTaskTarget(prescale, timer_tick, (s * 1000000UL))
+
 typedef struct __task {
     COUNTER_TIMER_TYPE counter;
     COUNTER_TIMER_TYPE target;
